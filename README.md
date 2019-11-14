@@ -5,6 +5,6 @@ TOOLS:
 Maven,
 JDK1.8
 
-Note: From the config file (src/main/resources/config.properties),  swith the operating system to either 'mac' or 'windows' 
+Note: From the config file (src/main/resources/config.properties),  switch the operating system to either 'mac' or 'windows' 
 
 Execute the TestRunner.java (src/main/java/com/EE/TestRunner.java) class to run the test
