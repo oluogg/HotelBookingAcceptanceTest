@@ -1,16 +1,10 @@
 package com.EE.utility;
 
-import com.EE.pageobject.HotelBookingPage;
-import io.cucumber.core.api.Scenario;
+import cucumber.api.Scenario;
 import io.restassured.http.ContentType;
-import io.restassured.response.Response;
-import org.json.simple.parser.JSONParser;
 import org.junit.Assert;
 import org.openqa.selenium.*;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
-import org.openqa.selenium.support.ui.WebDriverWait;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -22,10 +16,9 @@ import static io.restassured.RestAssured.when;
 
 public class Support {
 
-    JSONParser jsonParser = new JSONParser();
+
     private static Properties configProperties = new Properties();
-    PayloadTemplate payloadTemplate = new PayloadTemplate();
-    private Response response = null;
+    private PayloadTemplate payloadTemplate = new PayloadTemplate();
 
 
     /* Reads the config data property file */
@@ -71,29 +64,32 @@ public class Support {
 
 
     public void getRequest(String uri){
-        response = when().get(uri);
+        ScenarioContext.response = when().get(uri);
     }
 
 
     public void postRequest(String jsonFile, String uri) throws IOException {
         File file = new File("payload/" + jsonFile);
         payloadTemplate.writeToJSONFile(file);
-        response = given().contentType(ContentType.JSON).body(file).post(uri);
-//        ScenarioContext.bookingID = response.jsonPath().getInt("bookingid");
-//        ScenarioContext.booked_first_name = response.jsonPath().getString("firstname");
+        ScenarioContext.response = given().contentType(ContentType.JSON).body(file).post(uri);
+        ScenarioContext.bookingID = ScenarioContext.response.jsonPath().getInt("bookingid");
+        ScenarioContext.booked_first_name = ScenarioContext.response.jsonPath().getString("booking.firstname");
     }
 
     public void deleteRequest(String uri){
-        System.out.println("========+++++++++"+uri+"/"+ScenarioContext.bookingID);
-        response = given().when().contentType(ContentType.JSON).delete(uri+"/"+ScenarioContext.bookingID);
+
+        ScenarioContext.response = given().when().contentType(ContentType.JSON).delete(uri+"/"+ScenarioContext.bookingID);
     }
 
 
     public void verifyResponseCode(int statusCode){
-        System.out.println(response.body().print());
-        Assert.assertEquals(statusCode, response.getStatusCode());
+        System.out.println(ScenarioContext.response.body().print());
+        Assert.assertEquals(statusCode, ScenarioContext.response.getStatusCode());
     }
 
+    public void refreshPage(){
+        driver.navigate().refresh();;
+    }
 
     /* Captures a screen shot of the page where a failure occurs */
     static void embedScreenshot(Scenario scenario) {

@@ -2,13 +2,11 @@ package com.EE.stepdefs;
 
 import com.EE.pageobject.HotelBookingPage;
 import com.EE.utility.Support;
-import cucumber.api.PendingException;
+import cucumber.api.DataTable;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
-import io.cucumber.datatable.DataTable;
-import org.apache.commons.logging.Log;
 
 public class HotelBookingStepDef {
 
@@ -20,7 +18,7 @@ public class HotelBookingStepDef {
         support = new Support();
     }
 
-    @And("^submits the \"([^\"]*)\" with \"([^\"]*)\"$")
+    @And("^user submits the \"([^\"]*)\" with \"([^\"]*)\"$")
     public void submitsTheWith(String form, String data_type, DataTable data) throws Throwable {
 
         hotelBookingPage.completeHotelBooking(data);
@@ -39,7 +37,7 @@ public class HotelBookingStepDef {
         hotelBookingPage.deleteBooking();
     }
 
-    @Then("^the user is \"([^\"]*)\" on the page$")
+    @Then("^the booking is \"([^\"]*)\" on the page$")
     public void theUserOnThePage(String status) throws Throwable {
         switch (status) {
             case "Displayed":
@@ -55,9 +53,7 @@ public class HotelBookingStepDef {
 
     @When("^the performs a GET request to the \"([^\"]*)\"$")
     public void thePerformsAGETRequestToThe(String endpoint) throws Throwable {
-        System.out.println("+++++++++++++++++++" + endpoint);
         endpoint = Support.getConfigDataFileData(endpoint);
-        System.out.println("=========================" + endpoint);
         support.getRequest(endpoint);
     }
 
@@ -86,5 +82,16 @@ public class HotelBookingStepDef {
     @And("^the booking is registered")
     public void theBookingIsDsplayed() throws Throwable {
         hotelBookingPage.verifyRegisteredBooking();
+    }
+
+    @Given("^the registered booking is displayed on the UI$")
+    public void theRegisteredBookingIsDisplayedOnTheUI() throws Throwable {
+        support.refreshPage();
+        hotelBookingPage.verifyRegisteredBookingOnUI();
+    }
+
+    @When("^the user deletes the booking from the UI$")
+    public void theUserDeletesTheBookingFromTheUI() throws Throwable {
+        hotelBookingPage.deleteBookingFromUI();
     }
 }

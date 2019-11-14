@@ -5,7 +5,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
-public class PayloadTemplate {
+class PayloadTemplate {
 
     private String payloadTemplate = "{\n" +
             "  \"firstname\":" + "\""+ScenarioContext.tobe_registered_firstname + "\",\n" +
@@ -18,7 +18,7 @@ public class PayloadTemplate {
             "  }\n" +
             "}";
 
-    public void writeToJSONFile(File file) throws IOException {
+    void writeToJSONFile(File file) throws IOException {
         BufferedWriter out = new BufferedWriter(new FileWriter(file));
         out.write(payloadTemplate);
 

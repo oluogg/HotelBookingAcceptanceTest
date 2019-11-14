@@ -2,13 +2,15 @@ package com.EE.pageobject;
 
 import com.EE.utility.ScenarioContext;
 import com.EE.utility.Support;
-import io.cucumber.datatable.DataTable;
+import cucumber.api.DataTable;
 import io.restassured.response.Response;
 import org.junit.Assert;
 import org.openqa.selenium.By;
+
 import static com.EE.utility.Hooks.driver;
 import static io.restassured.RestAssured.*;
 import static org.hamcrest.Matchers.*;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
@@ -48,8 +50,6 @@ public class HotelBookingPage {
 
     /*completes the form with data from the feature file*/
     public void completeHotelBooking(DataTable data) throws InterruptedException {
-
-
         By save_btn = By.xpath("//input[@id = 'firstname']/following::input[@type]");
         Map<String, String> m = data.asMap(String.class, String.class);
         setUser_created_name(m.get("first_name") + ScenarioContext.formatter.format(ScenarioContext.date));
@@ -67,22 +67,29 @@ public class HotelBookingPage {
     public void verifyStatus(Boolean status) throws InterruptedException {
         created_user_locator = By.xpath("//*[text() = '" + user_created_name + "']");
 
-        if (status.equals(true)){
+        if (status.equals(true)) {
             Assert.assertEquals(driver.findElement(created_user_locator).isDisplayed(), status);
-        }
-        else
+        } else
             Assert.assertEquals(!driver.findElement(created_user_locator).isDisplayed(), status);
     }
 
 
     /* Deletes a booking by name of registered user */
     public void deleteBooking() {
-        delete_user = By.xpath("(//*[text() = '"+ user_created_name + "']/following::input[@type = 'button'])[1]");
+        delete_user = By.xpath("(//*[text() = '" + user_created_name + "']/following::input[@type = 'button'])[1]");
         support.click(delete_user);
     }
 
-    public void verifyRegisteredBooking(){
-
+    public void verifyRegisteredBooking() {
         Assert.assertEquals(ScenarioContext.tobe_registered_firstname, ScenarioContext.booked_first_name);
+    }
+
+    public void verifyRegisteredBookingOnUI() {
+        Assert.assertTrue(driver.findElement(By.xpath("//*[text() = '"+ScenarioContext.booked_first_name+"']")).isDisplayed());
+    }
+
+    public void deleteBookingFromUI() {
+        delete_user = By.xpath("(//*[text() = '" + ScenarioContext.booked_first_name + "']/following::input[@type = 'button'])[1]");
+        support.click(delete_user);
     }
 }
