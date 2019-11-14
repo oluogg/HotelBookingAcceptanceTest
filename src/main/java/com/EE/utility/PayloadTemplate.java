@@ -13,8 +13,8 @@ class PayloadTemplate {
             "  \"totalprice\":\"12\",\n" +
             "  \"depositpaid\":\"true\",\n" +
             "  \"bookingdates\":{\n" +
-            "    \"checkin\":\"2019-11-14\",\n" +
-            "    \"checkout\":\"2019-11-14\"\n" +
+            "    \"checkin\":\""+ ScenarioContext.getCheck_in_date()+"\",\n" +
+            "    \"checkout\":\""+ ScenarioContext.getCheck_out_date() +"\"\n" +
             "  }\n" +
             "}";
 

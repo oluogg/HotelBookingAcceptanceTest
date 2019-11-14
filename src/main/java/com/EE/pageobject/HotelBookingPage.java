@@ -18,7 +18,6 @@ import java.util.Map;
 public class HotelBookingPage {
 
     private Support support;
-    private static By created_user_locator;
     private static By delete_user;
     private static By first_name = By.id("firstname");
     private static By last_name = By.id("lastname");
@@ -52,20 +51,23 @@ public class HotelBookingPage {
     public void completeHotelBooking(DataTable data) throws InterruptedException {
         By save_btn = By.xpath("//input[@id = 'firstname']/following::input[@type]");
         Map<String, String> m = data.asMap(String.class, String.class);
-        setUser_created_name(m.get("first_name") + ScenarioContext.formatter.format(ScenarioContext.date));
+        setUser_created_name(m.get("first_name") + ScenarioContext.formatter1.format(ScenarioContext.date));
         support.enterText(first_name, user_created_name);
         support.enterText(last_name, m.get("last_name"));
         support.enterText(price, m.get("price"));
         support.select(deposit, m.get("deposit"));
-        support.enterText(check_in, m.get("check_in"));
-        support.enterText(check_out, m.get("check_out"));
+        ScenarioContext.setCheck_in_date(Integer.parseInt(m.get("check_in").replace("+","")));
+        support.enterText(check_in, ScenarioContext.getCheck_in_date());
+        ScenarioContext.setCheck_out_date(Integer.parseInt(m.get("check_out").replace("+","")));
+        support.enterText(check_out, ScenarioContext.getCheck_out_date());
         support.click(save_btn);
+
     }
 
 
     /* Verifies a user is either displayed or not */
     public void verifyStatus(Boolean status) throws InterruptedException {
-        created_user_locator = By.xpath("//*[text() = '" + user_created_name + "']");
+        By created_user_locator = By.xpath("//*[text() = '" + user_created_name + "']");
 
         if (status.equals(true)) {
             Assert.assertEquals(driver.findElement(created_user_locator).isDisplayed(), status);
