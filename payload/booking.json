@@ -1,0 +1,10 @@
+{
+  "firstname":"Test3931726",
+  "lastname":"TestLastName",
+  "totalprice":"12",
+  "depositpaid":"true",
+  "bookingdates":{
+    "checkin":"2019-11-14",
+    "checkout":"2019-11-14"
+  }
+}
